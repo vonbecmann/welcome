@@ -1,7 +1,9 @@
 welcome
 =======
 
-http://stfx.eu/pharo-server/ on the cloud
+The [pharo-server](http://stfx.eu/pharo-server/) on the [cloud](https://openshift.redhat.com/app/).
+
+You can see it in action at http://welcome-asylum.rhcloud.com/
 
 variables
 =========
