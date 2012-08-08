@@ -2,19 +2,19 @@
 
 function usage() {
     cat <<END
-Usage: $0 <script> <command> <image>
+Usage: $0 <command>
     manage a Smalltalk server
 Naming
-    script      is used as unique identifier
-    script.st   must exist and is the Smalltalk startup script  
-    script.pid  will be used to hold the process id
-    image.image is the Smalltalk image that will be started
+    pharo-server.pid  will be used to hold the process id
+
 Commands:
-    start    start the server in background
-    stop     stop the server
-    restart  restart the server
-    run      run the server in foreground
-    pid      print the process id 
+    start <ip-address>   start the server (bind to ip address)
+    run   <ip-address>   run the server in foreground (bind to ip address)
+    open                 open the image
+    stop                 stop the server
+    restart              restart the server
+    pid                  print the process id 
+    usage                this help
 END
     exit 1
 }
@@ -22,32 +22,23 @@ END
 script_home=$(dirname $0)
 script_home=$(cd $script_home && pwd)
 
-script=$1
-command=$2
-image=$3
+command=$1
+ip_address=$OPENSHIFT_INTERNAL_IP
+port=8080
+log_file=$OPENSHIFT_LOG_DIR/pharo-server.log
+image="$script_home/Pharo-2.0.image"
 
-echo Executing $0 $script $command $image
+echo Executing $0 $command $image $ip_address $port
 echo Working directory $script_home
-
-if [ "$#" -ne 3 ]; then
-    usage
-fi
-
-image="$script_home/$image.image"
 
 if [ ! -e "$image" ]; then
     echo $image not found
     exit 1
 fi
 
-st_file="$script_home/$script.st"
+st_file="zn-server $ip_address $port"
 
-if [ ! -e "$st_file" ]; then
-    echo $st_file not found
-    exit 1
-fi
-
-pid_file="$script_home/$script.pid"
+pid_file="$script_home/pharo-server.pid"
 
 vm=$script_home/bin/CogVM
 options="-vm-display-null -vm-sound-null"
@@ -58,14 +49,8 @@ function start() {
 	rm -f $pid_file
     fi
     echo $vm $options $image $st_file
-    $vm $options $image $st_file 2>&1 >/dev/null &
+    nohup $vm $options $image $st_file > $log_file 2>&1 &
     echo $! >$pid_file
-}
-
-function run() {
-    echo Running $script in foreground
-    echo $vm $options $image $st_file
-    $vm $options $image $st_file
 }
 
 function stop() {
@@ -90,6 +75,18 @@ function stop() {
             done
 	fi
     fi
+}
+
+function run() {
+    echo Running $script in foreground
+    echo $vm $options $image $st_file
+    $vm $options $image $st_file
+}
+
+function open() {
+    echo Openning $image
+    echo $vm $image
+    $vm $image
 }
 
 function restart() {
@@ -124,7 +121,10 @@ case $command in
 		restart
 		;;
     run)
-		run
+	        run
+		;;
+    open)
+	        open
 		;;
     pid)
 	        printpid
