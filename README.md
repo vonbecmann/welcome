@@ -24,5 +24,5 @@ tests
 OPENSHIFT_LOG_DIR=~/workspaces OPENSHIFT_REPO_DIR=~/workspaces/welcome OPENSHIFT_INTERNAL_IP='127.0.0.1' ~/workspaces/welcome/.openshift/action_hooks/start <br>
 OPENSHIFT_LOG_DIR=~/workspaces OPENSHIFT_REPO_DIR=~/workspaces/welcome OPENSHIFT_INTERNAL_IP='127.0.0.1' ~/workspaces/welcome/pharo-server/st-exec.sh run <br>
 OPENSHIFT_LOG_DIR=~/workspaces OPENSHIFT_REPO_DIR=~/workspaces/welcome OPENSHIFT_INTERNAL_IP='127.0.0.1' ~/workspaces/welcome/.openshift/action_hooks/stop <br>
-~/workspaces/welcome/pharo-server/st-exec.sh open <br>
+OPENSHIFT_LOG_DIR=~/workspaces OPENSHIFT_REPO_DIR=~/workspaces/welcome OPENSHIFT_INTERNAL_IP='127.0.0.1' ~/workspaces/welcome/pharo-server/st-exec.sh open <br>
 
