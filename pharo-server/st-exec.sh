@@ -26,7 +26,7 @@ command=$1
 ip_address=$OPENSHIFT_INTERNAL_IP
 port=8080
 log_file=$OPENSHIFT_LOG_DIR/pharo-server.log
-image="$script_home/Pharo-2.0.image"
+image="$OPENSHIFT_DATA_DIR/base/welcome.image"
 
 echo Executing $0 $command $image $ip_address $port
 echo Working directory $script_home
@@ -40,7 +40,7 @@ st_file="zn-server $ip_address $port"
 
 pid_file="$script_home/pharo-server.pid"
 
-vm=$script_home/bin/CogVM
+vm=$OPENSHIFT_DATA_DIR/vm/pharo
 options="-vm-display-null -vm-sound-null"
 
 function start() {
